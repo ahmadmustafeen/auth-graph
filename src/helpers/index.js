@@ -1,5 +1,6 @@
 const bycrypt = require('bcryptjs')
 const UserSchema = require("../models/UserSchema")
+const OtpSchema = require("../models/OTPSchema")
 const jwt = require('jsonwebtoken')
 const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, EMAIL_ERROR, USER_UPDATED } = require("../constants")
 
@@ -92,9 +93,8 @@ const onResetPassword = async ({ email, password }) => {
     }
 
 }
-
 const onForgetPassword = async ({ email }) => {
-     const sendEmail = async (to, header, content) => {
+    const sendEmail = async (to, header, content) => {
         var nodemailer = require("nodemailer");
         var transporter = nodemailer.createTransport({
             service: "gmail",
@@ -103,7 +103,7 @@ const onForgetPassword = async ({ email }) => {
                 pass: process.env.user_password,
             },
         });
-    
+
         var mailOptions = {
             from: process.env.user_email,
             to: to,
@@ -131,26 +131,34 @@ const onForgetPassword = async ({ email }) => {
     const OTP = Math.floor(Math.random() * 10000);
     const content = `Your OTP is ${OTP}`;
     const header = "OTP";
-    if(await sendEmail(email, header, content)){
+    if (await sendEmail(email, header, content)) {
         return {
             success: true,
             message: "OTP sent"
         }
     }
-    else{
+    else {
         return {
             success: false,
             message: EMAIL_ERROR
         }
     }
 }
-
-const onVerifyOTP = (user) => {
-    return {
-        firstName: "worked",
-        lastName: "worked",
-        age: 11,
-    }
+const onVerifyOTP = async ({email,otp}) => {
+     const OTPExists = await OtpSchema.findOne({ email: email, otp: otp })
+        if (!OTPExists) {
+            return {
+                success: false,
+                message: "OTP is incorrect"
+            }
+        }
+        else {
+            await OtpSchema.deleteOne({ email: email, otp: otp })
+            return {
+                success: true,
+                message: "OTP verified",
+            }
+        }
 }
 
 

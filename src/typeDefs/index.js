@@ -27,13 +27,17 @@ const typeDefs = gql`
     message: String!
     user: User
   }
+  type OtpVerifyResponse {
+    success: Boolean!
+    message: String!
+  }
 
   type Query {
     hello: String!
     randomNumber: Int!
     signin(username:String,password:String): SigninResponse
     signup(firstName:String,lastName:String,email:String,phoneNumber:String,password:String): SignupResponse
-    verifyOtp: User
+    verifyOtp(email:String,otp:String): OtpVerifyResponse
     forgetPassword(email:String): ForgetPasswordResponse
     resetPassword(email:String,password:String): ResetPasswordResponse
   }

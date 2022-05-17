@@ -5,7 +5,7 @@ const resolvers = {
     randomNumber: () => Math.floor(Math.random() * 100).toString(),
     signin: (_,args,context,info)=>onSignIn(args),
     signup: (_,args,context,info)=>onSignUp(args),
-    verifyOtp: onVerifyOTP,
+    verifyOtp: (_,args,context,info)=>onVerifyOTP(args),
     forgetPassword: (_,args,context,info)=>onForgetPassword(args),
     resetPassword: (_,args,context,info)=>onResetPassword(args)
   },
