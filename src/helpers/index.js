@@ -2,7 +2,7 @@ const bycrypt = require('bcryptjs')
 const UserSchema = require("../models/UserSchema")
 const OtpSchema = require("../models/OTPSchema")
 const jwt = require('jsonwebtoken')
-const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, EMAIL_ERROR, USER_UPDATED } = require("../constants")
+const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, EMAIL_ERROR, USER_UPDATED, USER_OTP_NOT_FOUND, USER_OTP_VERIFIED } = require("../constants")
 
 const onSignIn = async ({ username, password }) => {
 
@@ -149,14 +149,14 @@ const onVerifyOTP = async ({email,otp}) => {
         if (!OTPExists) {
             return {
                 success: false,
-                message: "OTP is incorrect"
+                message: USER_OTP_NOT_FOUND
             }
         }
         else {
             await OtpSchema.deleteOne({ email: email, otp: otp })
             return {
                 success: true,
-                message: "OTP verified",
+                message: USER_OTP_VERIFIED,
             }
         }
 }
