@@ -2,8 +2,9 @@ const {gql} = require('apollo-server');
 const typeDefs = gql`
   type User {
     firstName: String!
-    lastName: String!
-    age: Int!
+    email:String!,
+    phoneNumber:String!,
+    lastName: String!,
     token: String
   }
   type SigninResponse {
