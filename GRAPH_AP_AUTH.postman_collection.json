@@ -1,0 +1,149 @@
+{
+	"info": {
+		"_postman_id": "250bfd33-7db1-4e02-a8de-87befa8fbb0a",
+		"name": "GRAPH_AP_AUTH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Signin($username: String, $password: String) {\n  signin(username: $username, password: $password) {\n    message\n    user{\n      firstName,\n      lastName,\n      email,\n      phoneNumber,\n      token,\n\n    }\n  }\n}\n",
+								"variables": "{\n  \"username\": \"engr.ahmadmustafeen@gmail.com\",\n  \"password\": \"123123\"\n}"
+							}
+						},
+						"url": {
+							"raw": "https://young-hamlet-60178.herokuapp.com/",
+							"protocol": "https",
+							"host": [
+								"young-hamlet-60178",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "REGISTER",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Signup($firstName: String, $lastName: String, $phoneNumber: String, $email: String, $password: String){\n  signup (firstName: $firstName,lastName: $lastName,phoneNumber: $phoneNumber,email: $email,password: $password){\n    success,\n    message,\n    user {\n      firstName\n      token\n    }\n  }\n}",
+								"variables": "{\n  \"firstName\": \"ahmad\",\n  \"lastName\": \"mustafeen\",\n  \"phoneNumber\": \"123123123\",\n  \"email\": \"engr.ahmdamaaasussstafeen@gmail.com\",\n  \"password\": \"123123123\"\n}"
+							}
+						},
+						"url": {
+							"raw": "https://young-hamlet-60178.herokuapp.com/",
+							"protocol": "https",
+							"host": [
+								"young-hamlet-60178",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RESET_PASSWORD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query onPasswordReset($email: String, $password: String){\n  resetPassword(email: $email,password: $password) {\n    message,\n    success\n    user {\n      email\n    }\n  }\n}",
+								"variables": "{\n  \"email\": \"engr.ahmadmustafeen@gmail.com\",\n  \"password\": \"123123\"\n}"
+							}
+						},
+						"url": {
+							"raw": "https://young-hamlet-60178.herokuapp.com/",
+							"protocol": "https",
+							"host": [
+								"young-hamlet-60178",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FORGET_PASSWORD",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query onPasswordForget($email: String){\n  forgetPassword (email: $email){\n    message\n    success\n  }\n}",
+								"variables": "{\n  \"email\": \"engr.ahmadmustafeen@gmail.com\"\n}"
+							}
+						},
+						"url": {
+							"raw": "https://young-hamlet-60178.herokuapp.com/",
+							"protocol": "https",
+							"host": [
+								"young-hamlet-60178",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VERIFY_OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query OtpVerify($otp: String, $email: String){\n  verifyOtp(otp: $otp,email: $email) {\n    success\n    message\n  }\n}",
+								"variables": "{\n  \"otp\": \"9089\",\n  \"email\": \"engr.ahmadmustafeen@gmail.com\"\n}"
+							}
+						},
+						"url": {
+							"raw": "https://young-hamlet-60178.herokuapp.com/",
+							"protocol": "https",
+							"host": [
+								"young-hamlet-60178",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
