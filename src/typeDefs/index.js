@@ -8,7 +8,11 @@ const typeDefs = gql`
   type Query {
     hello: String!
     randomNumber: Int!
-    signin: User
+    signin(username:String,password:String): User
+    signup: User
+    verifyOtp: User
+    forgetPassword: User
+    resetPassword: User
   }
   
   type Mutation {
