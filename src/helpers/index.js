@@ -1,7 +1,7 @@
 const bycrypt = require('bcryptjs')
 const UserSchema = require("../models/UserSchema")
 const jwt = require('jsonwebtoken')
-const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND } = require("../constants")
+const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, USER_ERROR } = require("../constants")
 const onSignIn = async ({ username, password }) => {
 
     const user = await UserSchema.findOne({ email: username })
@@ -26,19 +26,44 @@ const onSignIn = async ({ username, password }) => {
         success: true,
         message: LOGIN_SUCCESS,
         user: {
-            firstName: user.firstName, 
+            firstName: user.firstName,
             lastName: user.lastName,
-            email: user.email, 
+            email: user.email,
             phoneNumber: user.phoneNumber,
             token: token
         }
     }
 }
-const onSignUp = (user) => {
-    return {
-        firstName: "worked",
-        lastName: "worked",
-        age: 11,
+const onSignUp = async ({ firstName, lastName, phoneNumber, email, password }) => {
+    const UserAlreadyExist = await UserSchema.findOne({ email: email })
+    if (UserAlreadyExist) {
+        return {
+            success: false,
+            message: USER_EXIST
+        }
+    }
+    else {
+        const encryptedPassword = await bycrypt.hash(password, 10)
+        const user = new UserSchema({
+            firstName: firstName,
+            lastName: lastName,
+            phoneNumber: phoneNumber.toString(),
+            email: email,
+            password: encryptedPassword
+        })
+        const token = jwt.sign({ email: user.email }, process.env.TOKEN_KEY, { expiresIn: "2h" });
+        await user.save()
+        return {
+            success: true,
+            message: USER_CREATED,
+            user: {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phoneNumber: phoneNumber,
+                token: token
+            }
+        }
     }
 }
 const onResetPassword = (user) => {
