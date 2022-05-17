@@ -1,42 +1,59 @@
 const bycrypt = require('bcryptjs')
-const onSignIn =  async({username,password}) => {
+const UserSchema = require("../models/UserSchema")
+const jwt = require('jsonwebtoken')
+const onSignIn = async ({ username, password }) => {
 
-    
-    let data = await bycrypt.compare(username,"$2a$10$IWcedJTdb0RlbknhN0.d.uYrOfocszpp4.hjch13ENE83IASBfiTe")
+    const user = await UserSchema.findOne({ email: username })
+    if (!user) {
+        return {
+            success: false,
+            message: "User not found"
+        }
+    }
+    const isMatch = await bycrypt.compare(password, user.password)
+    if (!isMatch) {
+        return {
+            success: false,
+            message: "Password Incorrect"
+        }
+
+    }
+    const token = jwt.sign({ email: user.email }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
     return {
-
-        firstName:data.toString()||"worked",
-        lastName:password||"worked",
-        age: 11,
+        success: true,
+        message: "User found",
+        user: {firstName:user.firstName,lastName:user.lastName,age:user.age||0,token:token}
     }
 }
 const onSignUp = (user) => {
     return {
-        firstName:"worked",
-        lastName:"worked",
+        firstName: "worked",
+        lastName: "worked",
         age: 11,
     }
 }
 const onResetPassword = (user) => {
     return {
-        firstName:"worked",
-        lastName:"worked",
+        firstName: "worked",
+        lastName: "worked",
         age: 11,
     }
 }
 
 const onForgetPassword = (user) => {
     return {
-        firstName:"worked",
-        lastName:"worked",
+        firstName: "worked",
+        lastName: "worked",
         age: 11,
     }
 }
 
 const onVerifyOTP = (user) => {
     return {
-        firstName:"worked",
-        lastName:"worked",
+        firstName: "worked",
+        lastName: "worked",
         age: 11,
     }
 }

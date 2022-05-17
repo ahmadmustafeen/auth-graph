@@ -4,11 +4,17 @@ const typeDefs = gql`
     firstName: String!
     lastName: String!
     age: Int!
+    token: String
+  }
+  type SigninResponse {
+    success: Boolean!
+    message: String!
+    user: User
   }
   type Query {
     hello: String!
     randomNumber: Int!
-    signin(username:String,password:String): User
+    signin(username:String,password:String): SigninResponse
     signup: User
     verifyOtp: User
     forgetPassword: User
