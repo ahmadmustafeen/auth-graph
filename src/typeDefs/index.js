@@ -22,6 +22,11 @@ const typeDefs = gql`
     message: String!
     user: User
   }
+  type ForgetPasswordResponse {
+    success: Boolean!
+    message: String!
+    user: User
+  }
 
   type Query {
     hello: String!
@@ -29,7 +34,7 @@ const typeDefs = gql`
     signin(username:String,password:String): SigninResponse
     signup(firstName:String,lastName:String,email:String,phoneNumber:String,password:String): SignupResponse
     verifyOtp: User
-    forgetPassword: User
+    forgetPassword(email:String): ForgetPasswordResponse
     resetPassword(email:String,password:String): ResetPasswordResponse
   }
   

@@ -6,7 +6,7 @@ const resolvers = {
     signin: (_,args,context,info)=>onSignIn(args),
     signup: (_,args,context,info)=>onSignUp(args),
     verifyOtp: onVerifyOTP,
-    forgetPassword: onForgetPassword,
+    forgetPassword: (_,args,context,info)=>onForgetPassword(args),
     resetPassword: (_,args,context,info)=>onResetPassword(args)
   },
 };

@@ -20,6 +20,7 @@ const USER_OTP_NOT_FOUND= 'OTP not found';
 
 
 const LOGIN_SUCCESS= 'Login success';
+const EMAIL_ERROR= 'Email error';
 
 
 module.exports = {

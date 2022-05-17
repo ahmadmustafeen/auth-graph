@@ -1,7 +1,8 @@
 const bycrypt = require('bcryptjs')
 const UserSchema = require("../models/UserSchema")
 const jwt = require('jsonwebtoken')
-const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, USER_ERROR, USER_UPDATED } = require("../constants")
+const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, EMAIL_ERROR, USER_UPDATED } = require("../constants")
+
 const onSignIn = async ({ username, password }) => {
 
     const user = await UserSchema.findOne({ email: username })
@@ -66,7 +67,7 @@ const onSignUp = async ({ firstName, lastName, phoneNumber, email, password }) =
         }
     }
 }
-const onResetPassword = async({email,password}) => {
+const onResetPassword = async ({ email, password }) => {
     const USER_DOESNT_EXIST = await UserSchema.findOne({ email: email })
     if (!USER_DOESNT_EXIST) {
         return {
@@ -89,14 +90,58 @@ const onResetPassword = async({email,password}) => {
             }
         }
     }
-    
+
 }
 
-const onForgetPassword = (user) => {
-    return {
-        firstName: "worked",
-        lastName: "worked",
-        age: 11,
+const onForgetPassword = async ({ email }) => {
+     const sendEmail = async (to, header, content) => {
+        var nodemailer = require("nodemailer");
+        var transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.user_email,
+                pass: process.env.user_password,
+            },
+        });
+    
+        var mailOptions = {
+            from: process.env.user_email,
+            to: to,
+            subject: header,
+            text: content,
+        };
+        let resolved = true;
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (info) {
+                resolved = true;
+            } else {
+                resolved = false;
+            }
+        });
+        return resolved;
+    }
+    const userExists = await UserSchema.findOne({ email: email })
+    if (!userExists) {
+        return {
+            success: false,
+            message: USER_NOT_FOUND
+        }
+    }
+
+    const OTP = Math.floor(Math.random() * 10000);
+    const content = `Your OTP is ${OTP}`;
+    const header = "OTP";
+    if(await sendEmail(email, header, content)){
+        return {
+            success: true,
+            message: "OTP sent"
+        }
+    }
+    else{
+        return {
+            success: false,
+            message: EMAIL_ERROR
+        }
     }
 }
 
@@ -114,5 +159,5 @@ module.exports = {
     onSignUp,
     onResetPassword,
     onForgetPassword,
-    onVerifyOTP
+    onVerifyOTP,
 };
