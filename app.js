@@ -18,7 +18,7 @@ const url =process.env.MONGO_URL;
   connect.then(
   (db) => {
     server
-    .listen(8080)
+    .listen(process.env.PORT||8080)
     .then(({ url }) => console.log(`GraphQL server running at ${url}`));
     },
   (err) => {
