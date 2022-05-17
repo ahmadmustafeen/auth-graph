@@ -6,7 +6,7 @@ require("dotenv").config();
 
 
 
-
+ 
 const url =process.env.MONGO_URL;
   const connect = mongoose.connect(url, { useNewUrlParser: true });
   const server = new ApolloServer({
