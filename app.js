@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server");
 const { typeDefs } = require("./src/typeDefs");
-const { resolvers } = require("./src/resolvers");
+const { resolvers } = require("./src/Resolvers");
 const { default: mongoose } = require("mongoose");
 require("dotenv").config();
 
