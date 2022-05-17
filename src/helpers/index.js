@@ -1,7 +1,7 @@
 const bycrypt = require('bcryptjs')
 const UserSchema = require("../models/UserSchema")
 const jwt = require('jsonwebtoken')
-const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, USER_ERROR } = require("../constants")
+const { LOGIN_SUCCESS, USER_PASSWORD_INCORRECT, USER_NOT_FOUND, USER_EXIST, USER_CREATED, USER_ERROR, USER_UPDATED } = require("../constants")
 const onSignIn = async ({ username, password }) => {
 
     const user = await UserSchema.findOne({ email: username })
@@ -66,12 +66,30 @@ const onSignUp = async ({ firstName, lastName, phoneNumber, email, password }) =
         }
     }
 }
-const onResetPassword = (user) => {
-    return {
-        firstName: "worked",
-        lastName: "worked",
-        age: 11,
+const onResetPassword = async({email,password}) => {
+    const USER_DOESNT_EXIST = await UserSchema.findOne({ email: email })
+    if (!USER_DOESNT_EXIST) {
+        return {
+            success: false,
+            message: USER_NOT_FOUND
+        }
     }
+    else {
+        const encryptedPassword = await bycrypt.hash(password, 10)
+        const user = await UserSchema.findOneAndUpdate({ email: email }, { password: encryptedPassword })
+        return {
+            success: true,
+            message: USER_UPDATED,
+            user: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phoneNumber: user.phoneNumber,
+                token: user.token
+            }
+        }
+    }
+    
 }
 
 const onForgetPassword = (user) => {

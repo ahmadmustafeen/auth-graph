@@ -17,6 +17,12 @@ const typeDefs = gql`
     message: String!
     user: User
   }
+  type ResetPasswordResponse {
+    success: Boolean!
+    message: String!
+    user: User
+  }
+
   type Query {
     hello: String!
     randomNumber: Int!
@@ -24,7 +30,7 @@ const typeDefs = gql`
     signup(firstName:String,lastName:String,email:String,phoneNumber:String,password:String): SignupResponse
     verifyOtp: User
     forgetPassword: User
-    resetPassword: User
+    resetPassword(email:String,password:String): ResetPasswordResponse
   }
   
   type Mutation {
